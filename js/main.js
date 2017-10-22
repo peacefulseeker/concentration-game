@@ -102,6 +102,11 @@
 
 		var svgID = SVG.data('svg');
 		var svgFlipped = $(".svg-wrapper.flipped");
+		/* Prevent to fast clicking */
+		if ( svgFlipped.length >= 3 ) {
+			alert('not so fast');
+			return;
+		}
 		/*important to exclude itself, because it may contain class flipped already but not matched.*/
 		var svgMatched = svgFlipped.filter(function(){
 			return $(this).data('svg') == svgID;
