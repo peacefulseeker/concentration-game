@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Concentration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="//fonts.googleapis.com/css?family=Play:400,700&amp;subset=cyrillic-ext,latin-ext" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.min.css">
+  <script>
+    var version = '1.0';
+  </script>
+</head>
+<body>
+  <header>
+    <div class="nav-wrap">
+      <input class="burger-check" id="burger-check" type="checkbox">
+      <label for="burger-check" class="burger"></label>
+      <nav class="navigation">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#game">The Game</a></li>
+          <li><a href="#instructions">Instructions</a></li>
+          <li><a href="#about_us">About us</a></li>
+        </ul>
+      </nav>
+    </div>
+    <h1>"Concentration Game"</h1>
+  </header>
+
+  <main>
+    <section class="home">
+     <div class="container">
+      <h2 id="home">Welcome to the "Coordination Game"</h2>
+      <h3>Do not miss a chance to play our wonderful game!</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa veritatis error, deserunt architecto porro quae quo velit quibusdam mollitia earum maiores quisquam temporibus vel laudantium doloribus. Saepe aliquid, reprehenderit sapiente blanditiis, numquam vero aperiam ab officia, minima quibusdam ut fugit delectus nemo temporibus tenetur. Nulla atque amet quia ullam sint.</p>
+      <hr>
+      <a href="#game" class="button">Play Right Now!</a>
+    </div>
+
+  </section>
+  <section class="game even">
+    <h2 id="game">Start The Game Now!</h2>
+    <div class="grid">
+    </div>
+    <div class="time-spent">
+      <button id="start-game" class="button" onclick="startGame(event);">Start Game</button>
+      <span id="mins">00</span>
+      <span class="delimiter">:</span>
+      <span id="secs">00</span>
+      <div id="result"></div>
+    </div>
+  </section>
+
+  <section class="instructions">
+    <div class="container">
+      <h2 id="instructions">Instructions</h2>
+      <h3>Below you will find the rules of such a simple game</h3>
+      <ol>
+        <li>Above you will see the section with the game itself</li>
+        <li>Press <a href="#start-game">"Start Game"</a> button in order to start the a game</li>
+        <li>First click on the grid card you like and try to remember the card contents</li>
+        <li>Then click on another grid card and see if there is a match between first clicked and visible card and the second one. You will notice that matched cards will disappear once there and will flip back in case if not</li>
+        <li>Game is finished when all cards are paired</li>
+        <li>The less moves(clicks) you make, the better.</li>
+        <li>When the game is finished you will be given the time you spent on the game and move amount you made</li>
+        <li>In current version there is possibility to play on 4x4 grid. Sure the more cards, the harder becomes a game. </li>
+        <li>Have fun!</li>
+      </ol>
+    </div>
+  </section>
+  <section class="about_us even">
+    <div class="container">
+      <h2 id="about_us">About us</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae excepturi praesentium rem, quae maxime harum cupiditate voluptatibus iusto, pariatur molestiae optio culpa aut distinctio ad. Libero animi, temporibus beatae. Earum, iure, magni. Vel excepturi, a adipisci, natus accusamus quas asperiores quaerat architecto hic praesentium quibusdam eum. Laborum non eligendi cumque.</p>
+      <hr>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae excepturi praesentium rem, quae maxime harum cupiditate voluptatibus iusto, pariatur molestiae optio culpa aut distinctio ad. Libero animi, temporibus beatae. Earum, iure, magni. Vel excepturi, a adipisci, natus accusamus quas asperiores quaerat architecto hic praesentium quibusdam eum. Laborum non eligendi cumque.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Game Version: <script>document.write('<strong>' + version + '</strong>');</script></p>
+  <p>Made By: <strong>&copy; peacefulseeker</strong></p>
+  <p>For: <strong> Picanova</strong></p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

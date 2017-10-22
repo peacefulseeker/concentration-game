@@ -1,0 +1,220 @@
+@import 'vars';
+@import 'mixins';
+@import 'burger';
+
+* {
+  padding: 0;
+  margin: 0;
+}
+body {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-family: 'Play';
+  > * {
+    flex: 1 1 100%;
+    flex-basis: 100%;
+  }
+}
+button, a, input {
+  font-family: 'Play';
+}
+p {
+  line-height: 24px;
+}
+h2 {
+  font-size: 32px;
+}
+a {
+  text-decoration: none;
+  transition: 0.2s all ease;
+}
+.button {
+  display: inline-block;
+  transition: 0.2s all ease;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: $color-accent;
+  color: #fff;
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  outline: none;
+  margin: 0 10px;
+  font-size: 15px;
+  text-transform: uppercase;
+  &#start-new-game {
+    display: none;
+  }
+  &:hover {
+    background-color: lighten($color-accent, 10%);
+    box-shadow: 0 0 0 2px lighten($color-accent, 15%);
+  }
+  &:active {
+    box-shadow: 0 0 0 2px darken($color-accent, 15%);
+    background-color: darken($color-accent, 20%);
+  }
+}
+header {
+  padding-bottom: 100px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  text-rendering: optimizeLegibility;
+  color: $color-body;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: $color-accent;
+  background-image: url(../img/bg_header.png);
+  position: relative;
+  text-align: center;
+  color: #fff;
+  &::before {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+  > * {
+    position: relative;
+  }
+  ul {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    li {
+      margin: 10px;
+      list-style-type: none;
+      a {
+        color: #fff;
+        padding: 5px;
+        &:hover {
+          box-shadow: 0 0 1px 5px rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+  }
+
+  h1 {
+   font-size: 40px;
+    margin-top: 40px;
+  }
+}
+
+section {
+  padding: 50px 0;
+  text-align: center;
+  &.even{
+    color: #fff;
+    background-image: url(../img/bg_section.jpg);
+    background-repeat: no-repeat;
+    background-position: top center;
+  }
+  .container {
+    max-width: 80%;
+    margin:0 auto;
+  }
+  &.home{
+    .button {
+      margin-top: 20px;
+    }
+    p {
+      margin: 20px 0;
+    }
+  }
+  &.about_us {
+    p {
+      margin: 20px 0;
+      text-align: left;
+    }
+  }
+  &.instructions {
+    a {
+      color: $color-accent;
+    }
+    h3 {
+      margin-bottom: 30px;
+    }
+    ol {
+      text-align: left;
+      li{
+        line-height: 24px;
+      }
+    }
+  }
+  &.game {
+    #result {
+      visibility: hidden;
+      max-width: 320px;
+      margin: 20px auto;
+      line-height: 28px;
+      strong {
+        color: $color-accent;
+        font-size: 22px;
+      }
+    }
+    .time-spent {
+      font-size: 20px;
+    }
+    .grid {
+      flex-wrap: wrap;
+      justify-content: center;
+      display: none;
+      margin: 20px auto;
+      align-items: center;
+      max-width: 600px;
+      position: relative;
+      transition: 0.2s all ease;
+      > * {
+        background-color: transparentize(#fff, 0.4);
+        // border-radius: 50px; 
+        text-align: center;
+        flex: 0 0 20%;
+        padding: 10px;
+        position: relative;
+        perspective: 1000px;        
+        &::after {
+          content: "";
+          display: inline-block;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background-color: #fff;
+          z-index: 10;
+          width: 100%;
+          height: 100%;
+          border: 1px solid #ccc;
+          transition: 0.25s all ease;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+        &.flipped,
+        &.matched {
+          &::after {
+            transform: rotateY(90deg);
+            height: 0;
+            width: 0;
+          }
+        }
+        // margin-bottom: 50px;
+        svg {
+          max-width: 100%;
+          max-height: 80px;
+        }
+      }
+      &.show {
+        display: flex;
+      }
+    }
+  }
+}
+footer {
+  padding: 25px 0;
+  text-align: center;
+}
+
+@import 'media';
