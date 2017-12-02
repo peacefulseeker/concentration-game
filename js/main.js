@@ -32,6 +32,8 @@ var concentrationGame = ( function( $, window ) {
     if ( location.hash.length && $( location.hash ).length ) {
       scrollToTarget( $( location.hash ), 1000, -20 );
     }
+
+    $( "#preloader" ).addClass( "hidden" );
   };
 
   var flipAll = function() {
@@ -116,20 +118,21 @@ var concentrationGame = ( function( $, window ) {
       }
 
       /*important to exclude itself, because it may contain class flipped already but not matched.*/
-      svgMatched = $.grep( svgFlipped, function( svg, index, svgsaArr ) {
+      svgMatched = $.grep( svgFlipped, function( svg ) {
         return svg.getAttribute( "data-svg" ) === svgID;
       } );
 
       if ( svgMatched.length ) {
         SVG.add( svgMatched )
           .addClass( "matched" )
+
           /* immediately remove unnecessary class */
           .delay( 600 )
           .queue( function() {
             $( this )
-            .css( "visibility", "hidden" )
-            .removeClass( "flipped" )
-            .dequeue();
+              .css( "visibility", "hidden" )
+              .removeClass( "flipped" )
+              .dequeue();
           } );
 
         game.matches++;
@@ -149,7 +152,7 @@ var concentrationGame = ( function( $, window ) {
       SVG.addClass( "flipped" );
 
       /* Add to array in case exists */
-      if ( $.inArray( svgID, game.svgsFlipped ) == -1 ) {
+      if ( $.inArray( svgID, game.svgsFlipped ) === -1 ) {
         game.svgsFlipped.push( svgID );
       }
 
@@ -299,7 +302,12 @@ var concentrationGame = ( function( $, window ) {
     $( ".grid" ).append( svgReturn );
     game.status.finished = false;
     console.log( "The game was restarted!" );
-    window.startGame();
+
+    /* Starting a new game */
+    concentrationGame.startGame();
+
+    /* Scrolling to heading */
+    scrollToTarget( $( "#game" ), 0, -100 );
   };
 
   return {
@@ -312,16 +320,13 @@ var concentrationGame = ( function( $, window ) {
       return game;
     }
   };
-} )( jQuery, window );
+} )( window.jQuery, window, document );
 
 /* GLOBAL SCOPE */
 ( function( $ ) {
 
-  /* DOCUMENT.READY */
+  /* INITIALIZE ON DOCUMENT.READY */
   $( function() {
     concentrationGame.init();
-
-    /* Delete after */
-    concentrationGame.startGame();
   } );
 } )( jQuery );

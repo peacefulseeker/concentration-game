@@ -1,2 +1,4 @@
 $color-body: #666;
 $color-accent: #11f762;
+$color-accent-light: lighten($color-accent,.5);
+$color-accent-dark: darken($color-accent, .5);
