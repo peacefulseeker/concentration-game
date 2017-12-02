@@ -8,5 +8,8 @@
   "globals": {
     "document": true,
     "window": true
+  },
+  "rules": {
+    "linebreak-style": 0
   }
 }

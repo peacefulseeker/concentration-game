@@ -1,7 +1,7 @@
 var concentrationGame = ( function( $, window ) {
   var DOMStrings = {
     grid: ".grid",
-    svgWrapper: '.svg-wrapper'
+    svgWrapper: ".svg-wrapper"
   };
 
   var game = {
@@ -35,7 +35,7 @@ var concentrationGame = ( function( $, window ) {
   };
 
   var flipAll = function() {
-    $( DOMStrings.svgWrapper ).addClass( 'flipped' );
+    $( DOMStrings.svgWrapper ).addClass( "flipped" );
   };
 
   var scrollToTarget = function( scrollTarget, delay, offset ) {
@@ -80,51 +80,60 @@ var concentrationGame = ( function( $, window ) {
       } );
 
     $( DOMStrings.grid ).on( "click", ".svg-wrapper", function() {
+      var svgMatched;
+      var SVG = $( this );
+      var svgID = SVG.data( "svg" );
+
       if ( !game.status.started ) {
         alert( "Start the game first!" );
         return;
       }
-      var SVG = $( this );
 
       /* do nothing when clicked on on of the paired card */
       if ( SVG.hasClass( "matched" ) ) {
         return;
       }
 
-      var svgID = SVG.data( "svg" );
-      var svgFlipped = $( ".svg-wrapper.flipped" );
+      if ( SVG.hasClass( "flipped" ) ) {
 
-      /* Prevent to fast clicking. TODO: Consider another decision */
-      // if ( svgFlipped.length >= 3 ) {
-      //   alert( "not so fast" );
+        // console.log( game.svgsFlipped.indexOf( svgID ), "flipped!" );
+        return;
+      }
+
+      // if ( game.svgsFlipped.length > 2 ) {
+      //   alert( "Not so fast!" );
+      //   game.svgsFlipped.length = 0;
       //   return;
       // }
 
-      console.log(game.svgsFlipped);
+      var svgFlipped = $( ".svg-wrapper" ).filter( ".flipped" );
+      console.log( svgFlipped );
+
+      /* Prevent to fast clicking. TODO: Consider another decision */
+      if ( svgFlipped.length >= 3 ) {
+        alert( "not so fast" );
+        return;
+      }
 
       /*important to exclude itself, because it may contain class flipped already but not matched.*/
-      var svgMatched = svgFlipped.filter( function() {
-        return $( this ).data( "svg" ) === svgID;
+      svgMatched = $.grep( svgFlipped, function( svg, index, svgsaArr ) {
+        return svg.getAttribute( "data-svg" ) === svgID;
       } );
 
       if ( svgMatched.length ) {
         SVG.add( svgMatched )
           .addClass( "matched" )
+          /* immediately remove unnecessary class */
           .delay( 600 )
           .queue( function() {
             $( this )
-              .css( "visibility", "hidden" )
-              .dequeue();
+            .css( "visibility", "hidden" )
+            .removeClass( "flipped" )
+            .dequeue();
           } );
 
-        // svgMatched.remove();
-        $( ".svg-wrapper" )
-          .not( svgMatched )
-          .removeClass( "flipped" );
         game.matches++;
       } else {
-
-        // $(".svg-wrapper").removeClass('flipped');
         if ( svgFlipped.length ) {
           $( ".svg-wrapper" )
             .delay( 500 )
@@ -136,13 +145,21 @@ var concentrationGame = ( function( $, window ) {
             } );
         }
       }
-      $( this ).addClass( "flipped" );
-      game.svgsFlipped.push( $( this ).data('svg') );
+
+      SVG.addClass( "flipped" );
+
+      /* Add to array in case exists */
+      if ( $.inArray( svgID, game.svgsFlipped ) == -1 ) {
+        game.svgsFlipped.push( svgID );
+      }
+
       /* Counting game moves */
       game.moves++;
 
       /* Game was successfully finished! */
       if ( game.matches === game.gridCards / 2 ) {
+        console.log( "The game was finished!" );
+
         game.finished = true;
         clearInterval( game.timer );
         setTimeout( function() {
@@ -160,7 +177,7 @@ var concentrationGame = ( function( $, window ) {
           $( "#result" )
             .css( "visibility", "visible" )
             .html( congrats );
-          scrollToTarget( $( "#result" ), 0, -50 );
+          scrollToTarget( $( "#result" ), 0, -100 );
         }, 1000 );
       }
     } );
@@ -209,7 +226,7 @@ var concentrationGame = ( function( $, window ) {
 
   /* Filling the svgs array with random keys */
   var fillSvgsArray = function() {
-    game.svgs = [];
+    game.svgs.length = 0;
     $( ".grid > svg" )
       .find( "symbol[id]" )
       .each( function( index, svg ) {
@@ -223,7 +240,7 @@ var concentrationGame = ( function( $, window ) {
   };
 
   var init = function() {
-    console.log( "the game has started!" );
+    console.log( "The game was initialised!" );
 
     /* Get the SVG Sprite and Append to HTML in random order */
     $.get(
@@ -239,12 +256,14 @@ var concentrationGame = ( function( $, window ) {
   };
 
   var startGame = function() {
+    console.log( "The game was started!" );
     game.status.started = true;
 
     if ( game.timer !== undefined ) {
       alert( "First Finish The Game" );
       return;
     }
+
     game.timer = setInterval( function() {
       ++game.counter;
       game.mins = Math.floor( game.counter / 60 );
@@ -279,6 +298,7 @@ var concentrationGame = ( function( $, window ) {
     $( "#result" ).css( "visibility", "hidden" );
     $( ".grid" ).append( svgReturn );
     game.status.finished = false;
+    console.log( "The game was restarted!" );
     window.startGame();
   };
 
@@ -300,5 +320,8 @@ var concentrationGame = ( function( $, window ) {
   /* DOCUMENT.READY */
   $( function() {
     concentrationGame.init();
+
+    /* Delete after */
+    concentrationGame.startGame();
   } );
 } )( jQuery );
