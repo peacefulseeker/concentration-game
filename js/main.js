@@ -1,286 +1,86 @@
-( function( $ ) {
-  $( function() {
-    var concentrationGame = ( function() {
-      var game = {
-        status: {
-          finished: false,
-          started: false
-        },
-        svgs: [],
-        counter: 0,
-        timer: undefined,
-        mins: 0,
-        secs: 0,
-        moves: 0,
-        matches: 0,
-        gridCards: 16
-      };
+var concentrationGame = ( function( $, window ) {
+  var DOMStrings = {
+    grid: ".grid",
+    svgWrapper: '.svg-wrapper'
+  };
 
-      /* Helper Functions */
+  var game = {
+    status: {
+      finished: false,
+      started: false
+    },
+    svgs: [],
+    svgsFlipped: [],
+    counter: 0,
+    timer: undefined,
+    mins: 0,
+    secs: 0,
+    moves: 0,
+    matches: 0,
+    gridCards: 16,
 
-      var scrollToTarget = function( scrollTarget, delay, offset ) {
-        $( "html,body" )
-          .not( ":animated" )
-          .delay( delay )
-          .animate(
-            {
-              scrollTop: scrollTarget.offset().top + offset
-            },
-            400
-          );
-      };
-
-      var onSVGget = function( svg ) {
-        var svgReturn = "";
-        $( ".grid" ).append( svg );
-        svgs = fillSvgsArray();
-
-        /* First random append */
-        svgReturn = shuffleSVGS( svgs, svgReturn );
-
-        $( ".grid" )
-          .append( svgReturn )
-          .addClass( "show" );
-      };
-
-      var shuffleArray = function( arr ) {
-        return arr.sort( function() {
-          return Math.random() - 0.5;
-        } );
-      };
-
-      var init = function() {
-        console.log( "the game has started!" );
-
-        /* Get the SVG Sprite and Append to HTML in random order */
-        $.get(
-          "img/game-elements.svg",
-          function( svg ) {
-            onSVGget( svg );
-          },
-          "text"
-        );
-
-        /* Randomizing the keys */
-        function shuffleSVGS( svgs, svgReturn ) {
-          function forEachSvg() {
-            $.each( svgs, function( i, svg ) {
-              svgReturn +=
-                "<div class=\"svg-wrapper\" data-svg=\"" +
-                svg +
-                "\">\n" +
-                "<svg class=\"svg-icon\">\n" +
-                "<use xlink:href=\"#\"\n" +
-                svg +
-                "\"\" />\n" +
-                "</svg>\n" +
-                "</div>";
-            } );
-          }
-
-          for ( var i = 0; i < 2; i++ ) {
-            svgs.shuffle();
-            forEachSvg();
-          }
-          return svgReturn;
-        }
-
-        /* Filling the svgs array with random keys */
-        function fillSvgsArray() {
-          svgs = [];
-          $( ".grid > svg" )
-            .find( "symbol[id]" )
-            .each( function( index, svg ) {
-              svgs.push( svg.getAttribute( "id" ) );
-              svgs.shuffle();
-            } );
-
-          /* Slicing the svgs array in order to have necessery amount of cards */
-          return svgs.slice( 0, gridCards / 2 );
-        }
-      };
-
-      var startGame = function() {
-        game.status.started = true;
-
-        if ( game.timer !== undefined ) {
-          alert( "First Finish The Game" );
-          return;
-        }
-        game.timer = setInterval( function() {
-          ++game.counter;
-          game.mins = Math.floor( counter / 60 );
-          game.mins = game.mins < 10 ? "0" + game.mins : game.mins;
-          game.secs = game.counter % 60;
-          game.secs = game.secs < 10 ? "0" + game.secs : game.secs;
-          $( "#mins" ).text( game.mins );
-          $( "#secs" ).text( game.secs );
-        }, 1000 );
-      };
-
-      var startNewGame = function() {
-
-        /* Refreshing all vars */
-        if ( !finished ) {
-          alert( "First Finish The Game!" );
-          return;
-        }
-        clearInterval( timer );
-        timer = undefined;
-        counter = 0;
-        moves = 0;
-        matches = 0;
-        $( "#mins" ).text( "00" );
-        $( "#secs" ).text( "00" );
-        svgs = fillSvgsArray();
-        var svgReturn = shuffleSVGS( svgs, "" );
-        $( ".grid .svg-wrapper" )
-          .fadeOut()
-          .remove();
-        $( "#result" ).css( "visibility", "hidden" );
-        $( ".grid" ).append( svgReturn );
-        finished = false;
-        window.startGame();
-      };
-
-      return {
-        init: init,
-        startGame: startGame
-      };
-    } )();
-
-    // var arr = [ 2, 3, 4, 5, 6, 7 ];
-    // arr = cGame.shuffleArray( arr );
-    // console.log( arr );
-
-    // /* the right way to empty the array */
-    // arr.length = 0;
-    // console.log(arr);
-
-    var svgs = [];
-    var timer,
-      mins,
-      secs,
-      counter = 0,
-      moves = 0,
-      matches = 0;
-    var gridCards = 16;
-    var finished = false;
-    var started = false;
-
-    /* Shuffling the array in random order */
-    Array.prototype.shuffle = function() {
-      return this.sort( function() {
+    shuffle: function() {
+      this.svgs = this.svgs.sort( function() {
         return Math.random() - 0.5;
       } );
-    };
-
-    window.startGame = function() {
-      started = true;
-      if ( timer !== undefined ) {
-        alert( "First Finish The Game" );
-        return;
-      }
-      timer = setInterval( function() {
-        ++counter;
-        mins = Math.floor( counter / 60 );
-        mins = mins < 10 ? "0" + mins : mins;
-        secs = counter % 60;
-        secs = secs < 10 ? "0" + secs : secs;
-        $( "#mins" ).text( mins );
-        $( "#secs" ).text( secs );
-
-        // console.log( counter, mins, secs );
-      }, 1000 );
-    };
-
-    window.startNewGame = function() {
-
-      /* Refreshing all vars */
-      if ( !finished ) {
-        alert( "First Finish The Game!" );
-        return;
-      }
-      clearInterval( timer );
-      timer = undefined;
-      counter = 0;
-      moves = 0;
-      matches = 0;
-      $( "#mins" ).text( "00" );
-      $( "#secs" ).text( "00" );
-      svgs = fillSvgsArray();
-      var svgReturn = shuffleSVGS( svgs, "" );
-      $( ".grid .svg-wrapper" )
-        .fadeOut()
-        .remove();
-      $( "#result" ).css( "visibility", "hidden" );
-      $( ".grid" ).append( svgReturn );
-      finished = false;
-      window.startGame();
-    };
-
-    /* Get the SVG Sprite and Append to HTML in random order */
-    $.get(
-      "img/game-elements.svg",
-      function( svg ) {
-        onSVGget( svg );
-      },
-      "text"
-    );
-
-    function onSVGget( svg ) {
-      var svgReturn = "";
-      $( ".grid" ).append( svg );
-      svgs = fillSvgsArray();
-
-      /* First random append */
-      svgReturn = shuffleSVGS( svgs, svgReturn );
-
-      $( ".grid" )
-        .append( svgReturn )
-        .addClass( "show" );
     }
+  };
 
-    /* Randomizing the keys */
-    function shuffleSVGS( svgs, svgReturn ) {
-      function forEachSvg() {
-        $.each( svgs, function( i, svg ) {
-          svgReturn +=
-            "<div class=\"svg-wrapper\" data-svg=\"" +
-            svg +
-            "\">\n" +
-            "<svg class=\"svg-icon\">\n" +
-            "<use xlink:href=\"#\"\n" +
-            svg +
-            "\"\" />\n" +
-            "</svg>\n" +
-            "</div>";
-        } );
-      }
+  /* Helper Functions */
 
-      for ( var i = 0; i < 2; i++ ) {
-        svgs.shuffle();
-        forEachSvg();
-      }
-      return svgReturn;
+  window.onload = function() {
+    if ( location.hash.length && $( location.hash ).length ) {
+      scrollToTarget( $( location.hash ), 1000, -20 );
     }
+  };
 
-    /* Filling the svgs array with random keys */
-    function fillSvgsArray() {
-      svgs = [];
-      $( ".grid > svg" )
-        .find( "symbol[id]" )
-        .each( function( index, svg ) {
-          svgs.push( svg.getAttribute( "id" ) );
-          svgs.shuffle();
-        } );
+  var flipAll = function() {
+    $( DOMStrings.svgWrapper ).addClass( 'flipped' );
+  };
 
-      /* Slicing the svgs array in order to have necessery amount of cards */
-      return svgs.slice( 0, gridCards / 2 );
-    }
+  var scrollToTarget = function( scrollTarget, delay, offset ) {
+    $( "html,body" )
+      .not( ":animated" )
+      .delay( delay )
+      .animate( {
+          scrollTop: scrollTarget.offset().top + offset
+        },
+        400
+      );
+  };
 
-    $( ".grid" ).on( "click", ".svg-wrapper", function() {
-      if ( !started ) {
+  // Array.prototype.shuffle = function( arr ) {
+  //   return arr.sort( function() {
+  //     return Math.random() - 0.5;
+  //   } );
+  // };
+
+  var setupEventListeners = function() {
+    $( "a[href^='#']" )
+      .not( "[href=\"#\"]" )
+      .not( "[href=\"#0\"]" )
+      .on( "click", function( e ) {
+        e.preventDefault();
+        var $scrollTarget = $( $( this ).attr( "href" ) );
+        $scrollTarget = $scrollTarget.length ?
+          $scrollTarget :
+          $(
+            "[name=" +
+            $( this )
+            .attr( "href" )
+            .slice( 1 ) +
+            "]"
+          );
+
+        /* If not found stop execution */
+        if ( !$scrollTarget.length ) {
+          return;
+        }
+        scrollToTarget( $scrollTarget, 0, -20 );
+      } );
+
+    $( DOMStrings.grid ).on( "click", ".svg-wrapper", function() {
+      if ( !game.status.started ) {
         alert( "Start the game first!" );
         return;
       }
@@ -294,16 +94,19 @@
       var svgID = SVG.data( "svg" );
       var svgFlipped = $( ".svg-wrapper.flipped" );
 
-      /* Prevent to fast clicking */
-      if ( svgFlipped.length >= 3 ) {
-        alert( "not so fast" );
-        return;
-      }
+      /* Prevent to fast clicking. TODO: Consider another decision */
+      // if ( svgFlipped.length >= 3 ) {
+      //   alert( "not so fast" );
+      //   return;
+      // }
+
+      console.log(game.svgsFlipped);
 
       /*important to exclude itself, because it may contain class flipped already but not matched.*/
       var svgMatched = svgFlipped.filter( function() {
         return $( this ).data( "svg" ) === svgID;
       } );
+
       if ( svgMatched.length ) {
         SVG.add( svgMatched )
           .addClass( "matched" )
@@ -318,7 +121,7 @@
         $( ".svg-wrapper" )
           .not( svgMatched )
           .removeClass( "flipped" );
-        matches++;
+        game.matches++;
       } else {
 
         // $(".svg-wrapper").removeClass('flipped');
@@ -334,23 +137,25 @@
         }
       }
       $( this ).addClass( "flipped" );
-      moves++;
+      game.svgsFlipped.push( $( this ).data('svg') );
+      /* Counting game moves */
+      game.moves++;
 
       /* Game was successfully finished! */
-      if ( matches === gridCards / 2 ) {
-        finished = true;
-        clearInterval( timer );
+      if ( game.matches === game.gridCards / 2 ) {
+        game.finished = true;
+        clearInterval( game.timer );
         setTimeout( function() {
           $( ".button#start-game" )
             .text( "Start New Game" )
-            .attr( "onclick", "startNewGame(event)" );
+            .attr( "onclick", "concentrationGame.startNewGame(event)" );
           var congrats =
             "<p>Congratulations! You have successfully finsihed the game in <strong>" +
-            mins +
+            game.mins +
             " : " +
-            secs +
+            game.secs +
             "</strong> seconds! You have made <strong>" +
-            moves +
+            game.moves +
             "</strong> moves to finish the game</p>";
           $( "#result" )
             .css( "visibility", "visible" )
@@ -359,50 +164,141 @@
         }, 1000 );
       }
     } );
+  };
 
-    $( "a[href^='#']" )
-      .not( "[href=\"#\"]" )
-      .not( "[href=\"#0\"]" )
-      .on( "click", function( event ) {
-        event.preventDefault();
-        var $scrollTarget = $( $( this ).attr( "href" ) );
-        $scrollTarget = $scrollTarget.length ?
-          $scrollTarget :
-          $(
-              "[name=" +
-                $( this )
-                  .attr( "href" )
-                  .slice( 1 ) +
-                "]"
-            );
+  var onSVGget = function( svg ) {
+    var svgReturn;
+    $( DOMStrings.grid ).append( svg );
+    game.svgs = fillSvgsArray();
 
-        /* If not found stop execution */
-        if ( !$scrollTarget.length ) {
-          return;
-        }
-        scrollToTarget( $scrollTarget, 0, -20 );
+    /* First random append */
+    svgReturn = shuffleSVGS();
+
+    $( DOMStrings.grid )
+      .append( svgReturn )
+      .addClass( "show" );
+  };
+
+  /* Randomizing the keys */
+  var shuffleSVGS = function() {
+    var svgReturn = "";
+
+    function forEachSvg() {
+      $.each( game.svgs, function( i, svg ) {
+        svgReturn +=
+          "<div class=\"svg-wrapper\" data-svg=\"" +
+          svg +
+          "\">\n" +
+          "<svg class=\"svg-icon\">\n" +
+          "<use xlink:href=\"#" +
+          svg +
+          "\"/>\n" +
+          "</svg>\n" +
+          "</div>";
+      } );
+      return svgReturn;
+    }
+
+    for ( var i = 0; i < 2; i++ ) {
+      game.shuffle();
+      svgReturn = forEachSvg();
+    }
+
+    return svgReturn;
+  };
+
+  /* Filling the svgs array with random keys */
+  var fillSvgsArray = function() {
+    game.svgs = [];
+    $( ".grid > svg" )
+      .find( "symbol[id]" )
+      .each( function( index, svg ) {
+        game.svgs.push( svg.getAttribute( "id" ) );
       } );
 
-    if ( location.hash.length && $( location.hash ).length ) {
-      scrollToTarget( $( location.hash ), 1000, -20 );
-    }
+    game.shuffle();
 
-    function scrollToTarget( scrollTarget, delay, offset ) {
-      $( "html,body" )
-        .not( ":animated" )
-        .delay( delay )
-        .animate(
-          {
-            scrollTop: scrollTarget.offset().top + offset
-          },
-          400
-        );
-    }
-  } );
-} )( jQuery );
+    /* Slicing the svgs array in order to have necessery amount of cards */
+    return game.svgs.slice( 0, game.gridCards / 2 );
+  };
 
+  var init = function() {
+    console.log( "the game has started!" );
+
+    /* Get the SVG Sprite and Append to HTML in random order */
+    $.get(
+      "img/game-elements.svg",
+      function( svg ) {
+        onSVGget( svg );
+      },
+      "text"
+    );
+
+    /* Grid svg on click, scroll on window load, scrollto on click. */
+    setupEventListeners();
+  };
+
+  var startGame = function() {
+    game.status.started = true;
+
+    if ( game.timer !== undefined ) {
+      alert( "First Finish The Game" );
+      return;
+    }
+    game.timer = setInterval( function() {
+      ++game.counter;
+      game.mins = Math.floor( game.counter / 60 );
+      game.mins = game.mins < 10 ? "0" + game.mins : game.mins;
+      game.secs = game.counter % 60;
+      game.secs = game.secs < 10 ? "0" + game.secs : game.secs;
+      $( "#mins" ).text( game.mins );
+      $( "#secs" ).text( game.secs );
+    }, 1000 );
+  };
+
+  var startNewGame = function() {
+    var svgReturn = "";
+
+    /* Refreshing all vars */
+    if ( !game.finished ) {
+      alert( "First Finish The Game!" );
+      return;
+    }
+    clearInterval( game.timer );
+    game.timer = undefined;
+    game.counter = 0;
+    game.moves = 0;
+    game.matches = 0;
+    $( "#mins" ).text( "00" );
+    $( "#secs" ).text( "00" );
+    game.svgs = fillSvgsArray();
+    svgReturn = shuffleSVGS();
+    $( ".grid .svg-wrapper" )
+      .fadeOut()
+      .remove();
+    $( "#result" ).css( "visibility", "hidden" );
+    $( ".grid" ).append( svgReturn );
+    game.status.finished = false;
+    window.startGame();
+  };
+
+  return {
+    init: init,
+    startGame: startGame,
+    startNewGame: startNewGame,
+    flipAll: flipAll,
+
+    retrieveData: function() {
+      return game;
+    }
+  };
+} )( jQuery, window );
+
+/* GLOBAL SCOPE */
 ( function( $ ) {
-  $( function() {
 
+  /* DOCUMENT.READY */
+  $( function() {
+    concentrationGame.init();
   } );
 } )( jQuery );
