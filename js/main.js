@@ -1,4 +1,5 @@
 var concentrationGame = ( function( $, window ) {
+
   var DOMStrings = {
     grid: ".grid",
     svgWrapper: ".svg-wrapper"
@@ -12,7 +13,7 @@ var concentrationGame = ( function( $, window ) {
     svgs: [],
     svgsFlipped: [],
     counter: 0,
-    timer: undefined,
+    timer: null,
     mins: 0,
     secs: 0,
     moves: 0,
@@ -262,7 +263,7 @@ var concentrationGame = ( function( $, window ) {
     console.log( "The game was started!" );
     game.status.started = true;
 
-    if ( game.timer !== undefined ) {
+    if ( game.timer !== null ) {
       alert( "First Finish The Game" );
       return;
     }
@@ -287,7 +288,7 @@ var concentrationGame = ( function( $, window ) {
       return;
     }
     clearInterval( game.timer );
-    game.timer = undefined;
+    game.timer = null;
     game.counter = 0;
     game.moves = 0;
     game.matches = 0;
